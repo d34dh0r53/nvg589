@@ -4,6 +4,7 @@ package nvg589
 import (
 	"fmt"
 	"net"
+	"net/http"
 	"net/url"
 )
 
@@ -11,12 +12,18 @@ import (
 func Connect(rgwInternal string) string {
 	ipAddr := net.ParseIP(rgwInternal)
 
-	u, err := url.Parse("http://" + ipAddr.String() + "/cgi-bin/broadbandstatistics.ha")
-
+	url, err := url.Parse("http://" + ipAddr.String() + "/cgi-bin/broadbandstatistics.ha")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return u.String()
+	resp, err := http.Get(url.String())
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(resp)
+
+	return url.String()
 
 }
